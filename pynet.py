@@ -61,11 +61,25 @@ def download_file(
         else:
             m_aviso('guardando en %s' % path_dest)
         with open('%s' % path_dest, 'wb') as f:
-            total_length = eval(r.headers.get('content-length'))
-            dl = 0
+            total_length=None
+            dl=0
+            if 'content-length' in r.headers.keys():
+              total_length = eval(r.headers.get('content-length'))
+              print "no content-length"
+              print '%s%s' % (PROPS['negrita'], fg_VERDE[1])
             if total_length is None:
-                f.write(r.content)
-                return 1
+                for chunk in r.iter_content(1024):
+                    dl += len(chunk)
+                    f.write(chunk)
+                    done = 0
+                    sys.stdout.write(
+                        "\r --" + "%" + " [%s%s] %s of %s" % (
+                            '#' * done, '-' * (length_bar - done),
+                            dl, "desconocido"))
+                    sys.stdout.flush()
+                sys.stdout.write('\n')
+                print '%s' % END_char
+                m_aviso('guardando %s en %s\n' % (url, path_dest))
             else:
                 print '%s%s' % (PROPS['negrita'], fg_VERDE[1])
                 for chunk in r.iter_content(1024):
