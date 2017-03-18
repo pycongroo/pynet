@@ -87,13 +87,13 @@ class NetHandler():
                         sys.stdout.flush()
                     sys.stdout.write('\n')
                     print '%s' % END_char
-                if (dl / total_length == 1):
-                    m_aviso('guardando %s en %s\n' % (url, path_dest))
-                else:
-                    m_aviso(
-                        '%sDescarga incompleta\n eliminando%s' % (
-                            PROPS['negrita'], END_char), 0)
-                    os.remove(path_dest)
+                    if (dl / total_length == 1):
+                        m_aviso('guardando %s en %s\n' % (url, path_dest))
+                    else:
+                        m_aviso(
+                            '%sDescarga incompleta\n eliminando%s' % (
+                                PROPS['negrita'], END_char), 0)
+                        os.remove(path_dest)
         except KeyboardInterrupt:
             print END_char
             m_aviso('%sCancelado por usuario\n eliminando%s' % (PROPS['negrita'],
