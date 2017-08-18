@@ -56,10 +56,11 @@ class NetHandler():
             with open('%s' % path_dest, 'wb') as f:
                 total_length=None
                 dl=0
-                if 'content-length' in r.headers.keys():
-                  total_length = eval(r.headers.get('content-length'))
-                  print "no content-length"
-                  print '%s%s' % (PROPS['negrita'], fg_VERDE[1])
+                try:
+                    ind_length = map(lambda x:x.lower(),r.headers.keys()).index('content-length')
+                    total_length = eval(r.headers.values()[ind_length])
+                except ValueError as e:
+                    total_length = None;
                 if total_length is None:
                     for chunk in r.iter_content(1024):
                         dl += len(chunk)
